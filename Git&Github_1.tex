@@ -1,0 +1,194 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{natbib}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82} 
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\newenvironment{warningbox}{%
+	\begin{framed}
+		\noindent \warning \textbf{ Avertissement : }
+	}{%
+	\end{framed}
+}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=false,
+	breaklines=true,
+	captionpos=b,
+	keepspaces=true,
+	numbers=left,
+	numbersep=5pt,
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Git et GitHub}
+
+\author{par Max Auriol Biley}
+
+\date{\today}
+
+\begin{document}
+	
+	\maketitle
+	
+	\section{Introduction }
+	Git est un système de contrôle de version distribué.
+	
+	\section{PARTIE I : Initiation à Git et Github}
+	
+	Bien que similaires de par leurs noms, Git et Gihub ont deux missions différentes. 
+	L’un est un logiciel de versionning, c’est-à-dire qu’il permet d’avoir plusieurs versions d’un même fichier, ce qui permet au développeur de disposer exactement de la copie du fichier dont ils ont besoin, facilitant ainsi la collaboration et le suivi des projets logiciels. Tant dis que l'autre, est un hébergeur qui  stocke l’ensemble des dépôts Git du monde et sera la parcelle principale avec laquelle vous suivrez l’ensemble de vos projets.
+	
+	\subsection{Interface web Github}
+	
+Afin de vous familiariser à l'interface web Github, je vous invite à rapidement créer un compte.
+	\begin{itemize}
+		\item Cliquez sur le lien pour vous inscrire \href{https://github.com/}{Git}
+	\end{itemize}
+	
+	\subsection{Configuration initiale}
+	Avant de commencer à utiliser Git, configurez votre nom d'utilisateur et votre adresse e-mail.
+	
+	\begin{lstlisting}[language=bash]
+		git config --global user.name "Votre Nom"
+		git config --global user.email "votre.email@github.com"
+	\end{lstlisting}
+	
+	Vérifions si votre compte a bien été ajouté
+	
+	\begin{lstlisting}[language=bash]
+	git config --global --list
+	\end{lstlisting}
+	
+	\subsection{Sécurisez votre compte avec une connexion persistante via SSH}
+	
+	Tout d'abord, vérifions qu'aucune clé SSH a été ajoutée à votre machine
+		\begin{lstlisting}[language=bash]
+			ls -al ~/.ssh
+ 		\end{lstlisting}
+ 		
+ 	Générons une clé SSH à partir de l'algorithme RSA largement pris en charge par GITHUB
+ 	
+ 	\begin{lstlisting}[language=bash]
+ 		ssh-keygen -t rsa -b 4096 -C "votre_email@example.com"
+ 	\end{lstlisting}
+
+ 	Vérifions que l'agent est activé
+ 	 	\begin{lstlisting}[language=bash]
+ 			eval "$(ssh-agent -s)"
+  		\end{lstlisting}
+  		
+  	Ajoutons la clé à l'agent 
+  		\begin{lstlisting}[language=bash]
+  			ssh-add ~/.ssh/id_rsa
+  		\end{lstlisting}
+  		
+Après avoir vérifié tout cela, nous allons joindre notre clé publique à notre compte GitHub 
+RDV dans les paramètres de votre compte Github à la section SSH and GPG keys 
+  		
+      \textbf{Vérifions la configuration du compte} 
+  		\begin{lstlisting}[language=bash]
+  			ssh -T git@github.com
+  		\end{lstlisting}
+  		
+  		Félicitations vous venez de joindre votre compte GITHUB à vote machine via SSH !!!!
+  	
+ \subsection{Le crédo ACP (add . ; commit ; push )}
+	
+ Le crédo ACP es un mot que j'aime utiliser pour décrire les trois commandes git de base avec lesquelles vous interagirez beaucoup . 
+	\begin{lstlisting}[language=bash]
+		git add . 
+		git commit -m "message du commit "
+		git push 
+	\end{lstlisting}
+	
+	Afin de mieux comprendre comment nous utiliserons ces commandes  nous allons passez à la création de notre premier dépôt . 
+	
+	 \subsection{Crée un dépôt local et le relier au dépôt distant }
+	 
+	 Ouvrez votre terminal et crée un dossier au nom de FirstRepo . 
+	
+	\begin{lstlisting}[language=bash]
+	mkdir FirstRepo
+	\end{lstlisting}
+	\newpage
+	accédez au dossier 
+	
+	\begin{lstlisting}[language=bash]
+	    cd Firstrepo
+	\end{lstlisting}
+	\smallskip  \smallskip
+	
+	Une fois à l'intérieur du répertoire nous allons passez à la config de ce dernier . mais bien avant rendez-vous sur github pour créer un repository au nom de Firstrepo qui sera définit sur publique .\smallskip  \smallskip 
+	
+	\textbf{De retour dans notre terminal, accédez au dossier du repo et exécutons les commandes suivantes pour lier notre dépôt local au dépôt distant} 
+	
+	 echo "Mon premier dépôt github" >> README.md 
+	\begin{lstlisting}[language=bash]
+		git init 
+		git add README.md 
+		git commit -m "premier commit" 
+		git branch -M main 
+		git remote add origin git@github.com:"userGithub"/Firstrepo.git
+		git push -u origin main
+	\end{lstlisting}
+
+	\subsection{Cloner un dépôt existant}
+	Pour cloner un dépôt existant, utilisez :
+	
+	Clonage avec HTTPS 
+	\begin{lstlisting}[language=bash]
+		git clone https://github.com/utilisateur/depot.git
+	\end{lstlisting}
+	
+	Clonage SSH
+	\begin{lstlisting}[language=bash]
+		git clone git@github.com:"userGithub"/Firstrepo.git
+	\end{lstlisting}
+	
+	\section{PARTIE II : Git et Github Collaboration d'équipe Agile }
+	
+	\subsection{Gestion des branches }
+	\subsection{les demandes d'extraction (Pull Request PR) et issuses }
+	\subsection{Fork ou clone que faire en équipe ? }
+	\subsection{Commandes les plus utilisez en travaille collaboratif }
+	
+ \section{PARTIE III : Git et Github Gestion des conflits  }
+ 
+ \subsection{Conflits lier au travaille d'équipe }
+ \subsection{conflit lier au demande de fusion}
+ \subsection{top 5 des bonnes attitudes  à avoir devant un conflit github }
+
+
+	
+	\bibliography{references} 
+	
+	\begin{itemize} Documentation officiel de \smallskip
+		\item  \href{https://git-scm.com/docs/git}{git}
+	\end{itemize}
+	
+	\begin{itemize}
+		\item pour comprendre le mode de fonctionnement de \href{https://docs.github.com/en/authentication/connecting-to-github-with-ssh}{SSH git}
+	\end{itemize}
+	
+	\begin{itemize}
+		\item pour apprendre plus sur Git et GitHub \href{https://skills.github.com/}{skillsGit}
+	\end{itemize}
+	
+\end{document}
